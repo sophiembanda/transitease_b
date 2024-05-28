@@ -1,74 +1,88 @@
-import React, { useState } from "react";
-import "../css/signupcss/signup.css";
+// src/pages/SignupPage.jsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../contexts/UserContext';
+import '../css/signupcss/signup.css';
 
 const SignupPage = () => {
-  // State to manage which form is active (login or signup)
   const [isSignupActive, setIsSignupActive] = useState(false);
-  // State to manage messages from the server (success or error)
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
+  const { setUser } = useUser();
+  const navigate = useNavigate();
 
-  // Function to toggle between login and signup forms
   const toggleForm = () => {
     setIsSignupActive(!isSignupActive);
-    setMessage("");
+    setMessage('');
   };
 
-  // Function to handle signup form submission
   const handleSignup = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    const form = e.target; // Get the form element
-    const formData = new FormData(form); // Create a FormData object from the form
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
     const data = {
-      name: formData.get("name"),
-      username: formData.get("username"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-      confirm_password: formData.get("confirmPassword")
+      name: formData.get('name'),
+      username: formData.get('username'),
+      email: formData.get('email'),
+      password: formData.get('password'),
+      confirm_password: formData.get('confirmPassword'),
     };
 
-    // Send a POST request to the signup endpoint
-    const response = await fetch('http://localhost:5000/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data) // Convert the data object to JSON
-    });
+    try {
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    // Parse the JSON response from the server
-    const result = await response.json();
-    // Set the message state to display the server's response
-    setMessage(result.message || result.error);
+      const result = await response.json();
+      setMessage(result.message || result.error);
+
+      if (response.ok) {
+        setUser({ name: data.name, username: data.username, email: data.email });
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setMessage('An error occurred during signup. Please try again.');
+    }
   };
 
-  // Function to handle login form submission
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    const form = e.target; // Get the form element
-    const formData = new FormData(form); // Create a FormData object from the form
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
     const data = {
-      username: formData.get("username"),
-      password: formData.get("password")
+      username: formData.get('username'),
+      password: formData.get('password'),
     };
 
-    // Send a POST request to the login endpoint
-    const response = await fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data) // Convert the data object to JSON
-    });
+    try {
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    // Parse the JSON response from the server
-    const result = await response.json();
-    // Set the message state to display the server's response
-    setMessage(result.message || result.error);
+      const result = await response.json();
+      setMessage(result.message || result.error);
+
+      if (response.ok) {
+        setUser({ username: data.username });
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      setMessage('An error occurred during login. Please try again.');
+    }
   };
 
   return (
     <section className="form">
-      <div className={`container ${isSignupActive ? "active" : ""}`}>
+      <div className={`container ${isSignupActive ? 'active' : ''}`}>
         <div className="user signinBx">
           <div className="imgBx">
             <img
@@ -80,20 +94,11 @@ const SignupPage = () => {
             <form onSubmit={handleLogin}>
               <h2>Sign In</h2>
               <input type="text" name="username" placeholder="Username" required />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                required
-              />
+              <input type="password" name="password" placeholder="Password" required />
               <input type="submit" value="Login" />
               <p className="signup">
-                Don't have an account?{" "}
-                <button
-                  className="signupInbtn"
-                  type="button"
-                  onClick={toggleForm}
-                >
+                Don't have an account?{' '}
+                <button className="signupInbtn" type="button" onClick={toggleForm}>
                   Sign Up
                 </button>
               </p>
@@ -105,32 +110,14 @@ const SignupPage = () => {
             <form onSubmit={handleSignup}>
               <h2>Create an Account</h2>
               <input type="text" name="name" placeholder="Name" required />
-              <input
-                type="text"
-                name="username"
-                placeholder="Username" required
-              />
+              <input type="text" name="username" placeholder="Username" required />
               <input type="email" name="email" placeholder="Email" required />
-              <input
-                type="password"
-                name="password"
-                placeholder="Enter Password"
-                required
-              />
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                required
-              />
+              <input type="password" name="password" placeholder="Enter Password" required />
+              <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
               <input type="submit" value="Sign Up" />
               <p className="signup">
-                Already have an account?{" "}
-                <button
-                  className="signupInbtn"
-                  type="button"
-                  onClick={toggleForm}
-                >
+                Already have an account?{' '}
+                <button className="signupInbtn" type="button" onClick={toggleForm}>
                   Sign In
                 </button>
               </p>

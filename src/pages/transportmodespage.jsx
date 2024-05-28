@@ -1,13 +1,21 @@
-import "../css/transportmodes/transportmodes.css";
+// src/pages/TransportModesPage.jsx
+import React from 'react';
+import { useUser } from '../contexts/UserContext';
+import '../css/transportmodes/transportmodes.css';
 
-//components
-import TmpDetailsSection from "../components/transportmodescomponents/TmpDetailsSection";
-import TmpActionButtons from "../components/transportmodescomponents/TmpActionButtons";
-import TmpFeed from "../components/transportmodescomponents/TmpFeed";
+// Components
+import TmpDetailsSection from '../components/transportmodescomponents/TmpDetailsSection';
+import TmpActionButtons from '../components/transportmodescomponents/TmpActionButtons';
+import TmpFeed from '../components/transportmodescomponents/TmpFeed';
 
-const transportmode = () => {
+const TransportModesPage = () => {
+  const { routeInfo } = useUser();
+
   return (
     <div className="transport-modes-page flex-col">
+      <h1>Transport Modes</h1>
+      <p>Current Location: {routeInfo.current_location}</p>
+      <p>Destination: {routeInfo.destination}</p>
       <TmpDetailsSection />
       <TmpActionButtons />
       <TmpFeed />
@@ -15,4 +23,4 @@ const transportmode = () => {
   );
 };
 
-export default transportmode;
+export default TransportModesPage;

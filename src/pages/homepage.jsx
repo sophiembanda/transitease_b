@@ -1,11 +1,13 @@
+// src/pages/HomePage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../contexts/UserContext';
 import '../css/homecss/home.css';
 import InfoCont from '../components/homecomponents/InfoCont';
 import Features from '../components/homecomponents/Features';
 
 const HomePage = () => {
-  const [routeInfo, setRouteInfo] = useState(null);
+  const { setRouteInfo } = useUser();
   const [formData, setFormData] = useState({
     current_location: '',
     destination: '',
@@ -29,10 +31,6 @@ const HomePage = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log('Title:', document.title);
-  }, []);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -52,22 +50,9 @@ const HomePage = () => {
       alert(data.error);
     } else {
       setRouteInfo(data);
-      navigate('/');  // Navigates to the homepage to display the route info
+      navigate('/transportmodespage');  // Navigate to Transport Modes page
     }
   };
-
-  useEffect(() => {
-    fetch('/route_info')
-      .then(response => response.json())
-      .then(data => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          setRouteInfo(data);
-        }
-      })
-      .catch(error => console.error('Error fetching route info:', error));
-  }, []);
 
   return (
     <div>
@@ -94,13 +79,6 @@ const HomePage = () => {
         />
         <button type="submit">Get Route</button>
       </form>
-      {routeInfo && (
-        <div className="route-info">
-          <p>Start: {routeInfo.current_location}</p>
-          <p>End: {routeInfo.destination}</p>
-          <p>Route: {routeInfo.route}</p>
-        </div>
-      )}
     </div>
   );
 };
