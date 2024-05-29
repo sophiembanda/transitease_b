@@ -6,7 +6,7 @@ import os
 
 app = Flask(__name__)
 CORS(app)
-app.secret_key = os.urandom(24)
+app.secret_key = os.urandom(24).hex()
 
 # Initialize SQLite database
 def init_db():
