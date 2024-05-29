@@ -1,6 +1,5 @@
-// src/pages/TransportModesPage.jsx
 import React from 'react';
-import { useUser } from '../contexts/UserContext';
+import { useFormContext } from '../contexts/FormContext';
 import '../css/transportmodes/transportmodes.css';
 
 // Components
@@ -9,18 +8,18 @@ import TmpActionButtons from '../components/transportmodescomponents/TmpActionBu
 import TmpFeed from '../components/transportmodescomponents/TmpFeed';
 
 const TransportModesPage = () => {
-  const { routeInfo } = useUser();
+  const { formData } = useFormContext();
 
   return (
     <div className="transport-modes-page flex-col">
       <h1>Transport Modes</h1>
-      <p>Current Location: {routeInfo.current_location}</p>
-      <p>Destination: {routeInfo.destination}</p>
+      <p>Current Location: {formData.current_location}</p>
+      <p>Destination: {formData.destination}</p>
       <TmpDetailsSection />
       <TmpActionButtons />
       <TmpFeed />
     </div>
   );
-};
+}
 
 export default TransportModesPage;

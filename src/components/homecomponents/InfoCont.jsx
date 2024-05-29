@@ -1,8 +1,12 @@
+import { useNavigate } from 'react-router-dom';
 import "../../css/homecss/home.css";
 
 const InfoCont = () => {
+  const navigate = useNavigate();
+
   function handleBookNow() {
-    alert("Booked");
+    // alert("Booked");
+    navigate('/transportmodespage');  // Navigate to Transport Modes page
   }
 
   return (
@@ -21,11 +25,9 @@ const InfoCont = () => {
             <ion-icon name="navigate"></ion-icon>
           </div>
           <div className="book-div">
-            <a href="/">
-              <button className="book-now" onClick={handleBookNow}>
-                Book Now!
-              </button>
-            </a>
+            <button className="book-now" onClick={handleBookNow}>
+              Okay
+            </button>
           </div>
         </div>
         <div className="image">

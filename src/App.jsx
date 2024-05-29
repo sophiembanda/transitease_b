@@ -8,21 +8,24 @@ import TicketingPage from './pages/ticketingpage';
 import Navbar from './components/global/Navbar';
 import Footer from './components/global/Footer';
 import { UserProvider } from './contexts/UserContext';
+import { FormProvider } from './contexts/FormContext';
 
 const App = () => {
   return (
     <UserProvider>
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/transportmodespage" element={<TransportModesPage />} />
-          <Route path="/ticketingpage" element={<TicketingPage />} />
-          <Route path="/signuppage" element={<SignupPage />} />
-          <Route path="/login" element={<SignupPage />} />
-        </Routes>
-        <Footer />
-      </Router>
+      <FormProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/transportmodespage" element={<TransportModesPage />} />
+            <Route path="/ticketingpage" element={<TicketingPage />} />
+            <Route path="/signuppage" element={<SignupPage />} />
+            <Route path="/login" element={<SignupPage />} />
+          </Routes>
+          <Footer />
+        </Router>
+      </FormProvider>
     </UserProvider>
   );
 };
