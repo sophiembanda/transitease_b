@@ -1,17 +1,13 @@
 // src/pages/HomePage.jsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from '../contexts/UserContext';
+import { useFormContext } from '../contexts/FormContext';
 import '../css/homecss/home.css';
 import InfoCont from '../components/homecomponents/InfoCont';
 import Features from '../components/homecomponents/Features';
 
 const HomePage = () => {
-  const { setRouteInfo } = useUser();
-  const [formData, setFormData] = useState({
-    current_location: '',
-    destination: '',
-  });
+  const { formData, setFormData } = useFormContext();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,18 +34,18 @@ const HomePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/route', {
+    const response = await fetch('http://localhost:5000/route', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // Include cookies in request
       body: JSON.stringify(formData),
     });
     const data = await response.json();
     if (data.error) {
       alert(data.error);
     } else {
-      setRouteInfo(data);
       navigate('/transportmodespage');  // Navigate to Transport Modes page
     }
   };
